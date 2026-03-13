@@ -1,0 +1,7 @@
+{
+  "threshold": 0.22,
+  "min_token_len": 3,
+  "top_k": 20,
+  "remove_stopwords": true,
+  "num_workers": 2
+}

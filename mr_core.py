@@ -117,18 +117,22 @@ def shuffle_stage(mapped: Iterable[KV]) -> Dict[str, List[Any]]:
     # ################ STUDENT TODO (Layer 1 core) BEGIN ################
     # Student goal:
     # - Implement "group by key" for intermediate map outputs.
-    #
     # Input:
     # - mapped: iterable of (key, value), e.g. [("cat", 1), ("dog", 1), ("cat", 1)]
-    #
     # Output:
     # - grouped dictionary, e.g. {"cat": [1, 1], "dog": [1]}
-    #
     # Hints:
     # - Use dict/list append pattern.
     # - Keep all values for each key; do not aggregate in shuffle stage.
-    _todo_warning("shuffle_stage", "shuffle_stage is not implemented yet; using empty grouped output.")
-    return {}
+
+    #_todo_warning("shuffle_stage", "shuffle_stage is not implemented yet; using empty grouped output.")
+
+    shuffled_dict: Dict[str, List[Any]] = defaultdict(list)
+    for key, value in mapped:
+        shuffled_dict[key].append(value)
+    return dict(shuffled_dict)  #用了defaultdict，转成普通dict返回，好像就结束了
+
+    # return {}
     # ################ STUDENT TODO (Layer 1 core) END ################
 
 

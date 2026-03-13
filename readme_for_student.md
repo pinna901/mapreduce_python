@@ -64,9 +64,9 @@ python generate_student_subset.py \
 ```
 
 # 示例，学号20220001：
-python generate_student_subset.py \
-  --student-id 20220001 \
-  --input master_arxiv_cs_ai_2026_to_2026_03_12.jsonl \
+python3 generate_student_subset.py \
+  --student-id 23076071 \
+  --input \ master_arxiv_cs_ai_2026_to_2026_03_12.jsonl \
   --sample-size 1000 \
   --output-dir student_release
 

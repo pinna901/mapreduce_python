@@ -1,0 +1,22 @@
+{
+  "student_id": "23076071",
+  "machine_hash": "0453fa5f9c0502ed11d4e580aecb67e4102c702125bddb890f7824884b756c65",
+  "machine_meta_used": {
+    "hostname": "DESKTOP-4E6SLVQ",
+    "username": "Pinnacle",
+    "platform": "Windows-10-10.0.26100-SP0",
+    "python_version": "3.11.9",
+    "mac_addr": "150009752257996"
+  },
+  "seed": "17976484908612655110",
+  "dataset_hash": "eb3a4ee07724c80bf89b0f01c70f064ffec76decafc604d721823deec8f2e751",
+  "sample_size": 1000,
+  "config": {
+    "threshold": 0.22,
+    "min_token_len": 3,
+    "top_k": 20,
+    "remove_stopwords": true,
+    "num_workers": 2
+  },
+  "note": "Please disclose environment fingerprint collection in the assignment notice."
+}
