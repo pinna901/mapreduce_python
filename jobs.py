@@ -122,15 +122,31 @@ def _ii_mapper(record: Dict[str, Any], min_token_len: int, remove_stopwords: boo
     # Input: one paper record
     # Output: list of (token, doc_id)
     # Important: emit each token at most once per document (use set)
-    _todo_warning("_ii_mapper")
-    return []
+    # _todo_warning("_ii_mapper")
+    # return []
+
+    docs_id = record.get("id", "")  #要求使用set()实现 每篇文章的每个token至多被输出一次
+    docs = record.get("text", "")
+    tokens = _normalize_tokens(docs, min_token_len, remove_stopwords)
+    unique_tokens = set(tokens)
+    ans = []
+    for tks in unique_tokens :
+        ans.append((tks,docs_id))
+    return ans
+
+    
 
 
 def _ii_reducer(key: str, values: List[Any]) -> KV:
     # Input: key=token, values=[doc_id, doc_id, ...]
     # Output: (token, sorted unique doc_id list)
-    _todo_warning("_ii_reducer")
-    return key, []
+    # _todo_warning("_ii_reducer")
+    
+    uniq_doc_id = set(values)  #注释里面有个unique，所以还是用上了set
+    v = sorted(list(uniq_doc_id))
+    return key,v
+    
+
 # ################ STUDENT TODO (Layer 2) END ################
 
 
@@ -155,15 +171,23 @@ def inverted_index_job(records: List[Dict[str, Any]], config: Dict[str, Any]) ->
 def _pf_mapper(record: Dict[str, Any], min_token_len: int, remove_stopwords: bool, prefix: str) -> List[KV]:
     # Input: one paper record + prefix (already lowercased by caller)
     # Output: (token, 1) only for tokens starting with prefix
-    _todo_warning("_pf_mapper")
-    return []
+    # _todo_warning("_pf_mapper")
+    # return []
+
+    text = record.get("text", "")
+    tokens = _normalize_tokens(text, min_token_len, remove_stopwords)
+    return [(token, 1) for token in tokens if token.startswith(prefix)]  #列表表达式应该可以完美应对需求
+    #切记不要用prefix in token ,这样不能满足以前缀为词首
 
 
 def _pf_reducer(key: str, values: List[Any]) -> KV:
     # Input: key=matched token, values=[1,1,...]
     # Output: (token, frequency among matched-prefix words)
-    _todo_warning("_pf_reducer")
-    return key, 0
+    # _todo_warning("_pf_reducer")
+    # return key, 0
+
+    return key, sum(values)          #xxxxxxxxxxxxxx
+
 # ################ STUDENT TODO (Layer 2) END ################
 
 
@@ -208,15 +232,34 @@ def _pair_mapper(token_posting: Dict[str, Any]) -> List[KV]:
     # [("d1||d2", 1), ("d1||d3", 1), ("d2||d3", 1)]
     # Meaning:
     # - This token contributes 1 to intersection size of every doc pair sharing it.
-    _todo_warning("_pair_mapper")
-    return []
+    # _todo_warning("_pair_mapper")
+    # return []
+
+    output = []
+    token = token_posting.get("token", "")
+    docs = token_posting["docs"]  #好像也可以用get,应该是类似的
+    l = len(docs)
+    for i in range(l) :
+        for j in range(i + 1, l) : #一定要避免 d1||d1
+                output.append((f"{docs[i]}||{docs[j]}", 1))
+    return output
+
+    # for doc1, doc2 in itertools.combinations(docs, 2):
+    #     # 按照题目要求的格式生成 key
+    #     pair_key = f"{doc1}||{doc2}"
+    #     output.append((pair_key, 1))
+    #看到有好多写起来更简洁的方法
+
 
 
 def _pair_reducer(key: str, values: List[Any]) -> KV:
     # Input: key=doc_i||doc_j, values=[1,1,...] from different shared tokens
     # Output: (doc_i||doc_j, intersection_count)
-    _todo_warning("_pair_reducer")
-    return key, 0
+    # _todo_warning("_pair_reducer")
+    # return key, 0
+
+    return key, sum(values) #好像就是这么简单...
+
 # ################ STUDENT TODO (Layer 2) END ################
 
 
