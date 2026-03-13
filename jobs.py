@@ -82,15 +82,20 @@ def _wc_mapper(record: Dict[str, Any], min_token_len: int, remove_stopwords: boo
     # Input: one paper record
     # Output: list of (token, 1)
     # Meaning: each occurrence contributes 1 count
-    _todo_warning("_wc_mapper")
-    return []
+    #_todo_warning("_wc_mapper")
+    #return []
+
+    input_text = record.get("text", "") #从record中获取文本内容，如果没有"text"字段则默认为空字符串
+    #调用之前实现的_normalize_tokens函数对文本进行处理
+    tokens = _normalize_tokens(input_text, min_token_len, remove_stopwords)
+    return [(token,1) for token in tokens] #列表表达式
 
 
 def _wc_reducer(key: str, values: List[Any]) -> KV:
     # Input: key=token, values=[1,1,1,...]
     # Output: (token, total_count)
-    _todo_warning("_wc_reducer")
-    return key, 0
+    #_todo_warning("_wc_reducer")
+    return key, sum(values)
 # ################ STUDENT TODO (Layer 2) END ################
 
 
