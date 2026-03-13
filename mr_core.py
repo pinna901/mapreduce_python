@@ -98,8 +98,11 @@ def map_stage(records: List[Dict[str, Any]], mapper: Mapper, num_workers: int) -
         return mapped
 
     chunks = _chunk_records(records, num_workers)
-    with Pool(processes=num_workers) as pool:
-        chunk_outputs = pool.map(_map_chunk, [(chunk, mapper) for chunk in chunks])
+    with Pool(processes=num_workers) as pool:  
+        chunk_outputs = pool.map(_map_chunk, [(chunk, mapper) for chunk in chunks]) 
+        """
+        这里就用了multiprocessing的Pool来并行处理map任务，pool.map会把每个chunk和mapper函数一起传给_map_chunk函数，_map_chunk函数会对chunk中的每条记录调用mapper函数，并收集所有的(key, value)对返回
+        """     
     flattened: List[KV] = []
     for out in chunk_outputs:
         flattened.extend(out)
@@ -170,6 +173,7 @@ def run_map_reduce(
     """
     End-to-end MapReduce pipeline: map -> shuffle -> reduce.
     """
+    #主要流程即为map_stage -> shuffle_stage -> reduce_stage，框架代码已经提供好了，只需要实现shuffle和reduce的核心逻辑就行了
     mapped = map_stage(records, mapper, num_workers=num_workers)
     grouped = shuffle_stage(mapped)
     reduced = reduce_stage(grouped, reducer, num_workers=num_workers)

@@ -57,8 +57,22 @@ def _normalize_tokens(text: str, min_token_len: int, remove_stopwords: bool) -> 
     # - If remove_stopwords=True, remove words in STOPWORDS
     # Return value:
     # - A list of normalized tokens (order can be kept as original appearance)
-    _todo_warning("_normalize_tokens")
-    return []   #换成真实实现的token列表
+
+    #_todo_warning("_normalize_tokens")
+
+    text = text.lower()
+    alphabetic_tokens = TOKEN_RE.findall(text)  #原代码中设置好的名为TOKEN_RE的正则（找字母表token）
+    filtered_tokens = []
+    for token in alphabetic_tokens:
+        if len(token) < min_token_len:
+            continue  # continue跳过这次循环剩余部分，直接进入下一个token的匹配处理
+        if remove_stopwords and token in STOPWORDS:
+            continue
+        filtered_tokens.append(token)
+    return filtered_tokens
+
+
+    #return []   #换成真实实现的token列表
     # ################ STUDENT TODO (Layer 2) END ################
 
 

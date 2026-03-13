@@ -98,8 +98,8 @@ python run_job.py \
 可以运行下面脚本查看每个任务的 map / shuffle / reduce 中间输出预览：
 
 ```bash
-python inspect_intermediate.py \
-  --student-dir "student_release/学号" \
+python3 inspect_intermediate.py \
+  --student-dir "student_release/23076071" \
   --task all \
   --prefix trans \
   --limit 5 \
